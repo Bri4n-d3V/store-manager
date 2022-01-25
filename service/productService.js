@@ -63,12 +63,33 @@ const getById = async (id) => {
 
   if (product.length === 0) return false;
 
-  console.log('productService', product);
   return product;
+};
+
+const updateProduct = async (id, name, quantity) => {
+  const funcNameIsValid = await nameIsValid(name);
+  const funcRepetitiveName = await repetitiveName(name);
+  const funcQuantityIsValid = await quantityIsValid(quantity);
+
+  const searchID = await productModel.getById(id);
+  if (searchID.length === 0) return { status: 404, message: 'Product not found' };
+
+  if (funcNameIsValid) return funcNameIsValid;
+  if (funcQuantityIsValid) return funcQuantityIsValid;
+  if (funcRepetitiveName) return funcRepetitiveName;
+
+  const product = await productModel.updateProduct(id, name, quantity);
+
+  console.log('productService', product);
+  return {
+    status: 200,
+    message: { id, name, quantity },
+  };
 };
 
 module.exports = {
   createProduct,
   getAll,
   getById,
+  updateProduct,
 };
