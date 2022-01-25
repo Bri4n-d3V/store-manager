@@ -40,8 +40,6 @@ const createProduct = async (name, quantity) => {
   const funcRepetitiveName = await repetitiveName(name);
   const funcQuantityIsValid = await quantityIsValid(quantity);
 
-    // console.log('funcNameIsValid', funcNameIsValid);
-    
   if (funcNameIsValid) return funcNameIsValid;
   if (funcRepetitiveName) return funcRepetitiveName;
   if (funcQuantityIsValid) return funcQuantityIsValid;
@@ -54,6 +52,23 @@ const createProduct = async (name, quantity) => {
   };
 };
 
+const getAll = async () => {
+  const products = await productModel.getAll();
+
+  return products;
+};
+
+const getById = async (id) => {
+  const product = await productModel.getById(id);
+
+  if (product.length === 0) return false;
+
+  console.log('productService', product);
+  return product;
+};
+
 module.exports = {
   createProduct,
+  getAll,
+  getById,
 };
