@@ -37,9 +37,24 @@ const updateProduct = async (id, name, quantity) => {
     'UPDATE products SET name = ?, quantity = ? WHERE id = ?;',
     [name, quantity, id],
   );
-
-  console.log('productModel', { id: product.insertId, name, quantity });
+  
   return { id: product.insertId, name, quantity };
 };
 
-module.exports = { createProduct, searchName, getAll, getById, updateProduct };
+const deleteProduct = async (id) => {
+  const [product] = await connection.query(
+    'DELETE FROM products WHERE id = ?', [id],
+  );
+  
+  console.log('productModel', product);
+  return product;
+};
+
+module.exports = { 
+  createProduct, 
+  searchName,
+  getAll,
+  getById,
+  updateProduct,
+  deleteProduct, 
+};

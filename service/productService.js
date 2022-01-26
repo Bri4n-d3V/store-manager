@@ -1,5 +1,6 @@
 const productModel = require('../model/productModel');
 
+// verifica se o nome da req cumpre alguns requisitos
 const nameIsValid = async (name) => {
   if (!name) {
     return { status: 400, message: '"name" is required' }; 
@@ -16,6 +17,7 @@ const nameIsValid = async (name) => {
   return false;
 };
 
+// verifica se o nome da req não é repetido
 const repetitiveName = async (name) => {
   const searchName = await productModel.searchName(name);
   if (searchName.length !== 0) return { status: 409, message: 'Product already exists' };
@@ -23,6 +25,7 @@ const repetitiveName = async (name) => {
   return false;
 };
 
+// revifica se a quantidade da req cumpre alguns requisitos
 const quantityIsValid = async (quantity) => {
   if (quantity === undefined) {
     return { status: 400, message: '"quantity" is required' }; 
@@ -35,6 +38,7 @@ const quantityIsValid = async (quantity) => {
   return false;
 };
 
+// envia para o controller a resposta com status e json de acordo com as verificações
 const createProduct = async (name, quantity) => {
   const funcNameIsValid = await nameIsValid(name);
   const funcRepetitiveName = await repetitiveName(name);
@@ -52,12 +56,14 @@ const createProduct = async (name, quantity) => {
   };
 };
 
+// envia para o controller a resposta com status e json de todos o produtos do BD
 const getAll = async () => {
   const products = await productModel.getAll();
 
   return products;
 };
 
+// envia para o controller a resposta com status e json de um produto de acordo com o ID
 const getById = async (id) => {
   const product = await productModel.getById(id);
 
@@ -66,6 +72,7 @@ const getById = async (id) => {
   return product;
 };
 
+// envia para o controller a resposta com status e json de um produto atualizado de acordo com as verificações
 const updateProduct = async (id, name, quantity) => {
   const funcNameIsValid = await nameIsValid(name);
   const funcRepetitiveName = await repetitiveName(name);
@@ -78,13 +85,23 @@ const updateProduct = async (id, name, quantity) => {
   if (funcQuantityIsValid) return funcQuantityIsValid;
   if (funcRepetitiveName) return funcRepetitiveName;
 
-  const product = await productModel.updateProduct(id, name, quantity);
+  await productModel.updateProduct(id, name, quantity);
 
-  console.log('productService', product);
   return {
     status: 200,
     message: { id, name, quantity },
   };
+};
+
+// envia para o controller a resposta com status e json de um produto deletado
+const deleteProduct = async (id) => {
+  const searchID = await productModel.getById(id);
+  if (searchID.length === 0) return false;
+
+  const product = await productModel.deleteProduct(id);
+
+  console.log('productService', product);
+  return product;
 };
 
 module.exports = {
@@ -92,4 +109,5 @@ module.exports = {
   getAll,
   getById,
   updateProduct,
+  deleteProduct,
 };

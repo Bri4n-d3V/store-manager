@@ -35,19 +35,31 @@ if (!product) return res.status(404).json({ message: 'Product not found' });
 router.put('/products/:id', async (req, res) => {
   const { id } = req.params;
   const { name, quantity } = req.body;
-  console.log('id', +id);
-  console.log('name', name);
-  console.log('quantity', quantity);
 
   const product = await productService.updateProduct(+id, name, quantity);
-  console.log('productController status', product.status);
-  console.log('productController message', product.message);
 
   if (typeof product.message === 'string') {
     return res.status(product.status).json({ message: product.message }); 
 }
 
   return res.status(product.status).json(product.message);
+});
+
+router.delete('/products/:id/', async (req, res) => {
+  const { id } = req.params;
+  console.log('id', id);
+
+  const product = await productService.getById(+id);
+  console.log('status', product.status);
+  console.log('message', product.message);
+
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' }); 
+}
+
+   res.status(200).json(product[0]);
+  
+   return productService.deleteProduct(+id);
 });
 
 module.exports = router;
