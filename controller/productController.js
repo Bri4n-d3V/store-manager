@@ -11,8 +11,7 @@ router.post('/', async (req, res) => {
   if (typeof newProduct.message === 'string') {
     return res.status(newProduct.status).json({ message: newProduct.message }); 
   }
-  
-  console.log('productController message', newProduct.message);
+
   return res.status(newProduct.status).json(newProduct.message);
 });
 
@@ -47,11 +46,8 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id/', async (req, res) => {
   const { id } = req.params;
-  console.log('id', id);
 
   const product = await productService.getById(+id);
-  console.log('status', product.status);
-  console.log('message', product.message);
 
   if (!product) {
     return res.status(404).json({ message: 'Product not found' }); 

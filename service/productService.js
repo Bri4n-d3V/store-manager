@@ -20,6 +20,7 @@ const nameIsValid = async (name) => {
 // verifica se o nome da req não é repetido
 const repetitiveName = async (name) => {
   const searchName = await productModel.searchName(name);
+  console.log('searchName', searchName);
   if (searchName.length !== 0) return { status: 409, message: 'Product already exists' };
 
   return false;
@@ -100,7 +101,6 @@ const deleteProduct = async (id) => {
 
   const product = await productModel.deleteProduct(id);
 
-  console.log('productService', product);
   return product;
 };
 

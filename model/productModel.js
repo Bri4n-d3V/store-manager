@@ -52,7 +52,6 @@ const deleteProduct = async (id) => {
     'DELETE FROM products WHERE id = ?', [id],
   );
   
-  console.log('productModel', product);
   return product;
 };
 

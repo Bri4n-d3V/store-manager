@@ -38,7 +38,6 @@ router.put('/:id', async (req, res) => {
   const [product] = req.body;
 
   const sale = await saleService.updateSale(product, +id);
-  console.log('controller sale', sale);
 
   if (typeof sale.message === 'string') { 
     return res.status(sale.status).json({ message: sale.message }); 
