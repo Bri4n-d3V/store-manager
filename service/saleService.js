@@ -37,17 +37,12 @@ const createSale = async (products) => {
   const checkProductId = await validateProductId(products);
   const checkQuantity = await validateQuantity(products);
   const checkQuantityReq = await validateQuantityReq(products);
-  console.log('checkProductId', checkProductId);
-  console.log('checkQuantity', checkQuantity);
-  console.log('checkQuantityReq', checkQuantityReq);
 
   if (checkProductId) return checkProductId;
   if (checkQuantity) return checkQuantity;
   if (checkQuantityReq) return checkQuantityReq;
 
   const { id } = await saleModel.createSale(products);
-  console.log('saleService sale_id', id);
-  console.log('saleService products', products);
 
   return {
     id,
@@ -58,7 +53,6 @@ const createSale = async (products) => {
 // envia para o saleController a resposta de todas as vendas que foram feitas
 const getAllSales = async () => {
   const sales = await saleModel.getAllSales();
-  console.log('saleService sales', sales);
 
   return sales;
 };
@@ -71,8 +65,38 @@ const saleById = async (id) => {
   return sales;
 };
 
+const validateUpdateQuantity = (quantity) => {
+  if (!quantity && quantity !== 0) {
+    return { status: 400, message: '"quantity" is required' };
+  }
+
+  if (quantity < 1 || typeof quantity === 'string') {
+    return { status: 422, message: '"quantity" must be a number larger than or equal to 1' };
+  }
+
+  return false;
+};
+
+const updateSale = async (product, id) => {
+  const { product_id: productId, quantity } = product;
+
+  const checkQuantity = await validateUpdateQuantity(quantity);
+
+  if (checkQuantity) return checkQuantity;
+
+  if (!productId) return { status: 400, message: '"product_id" is required' };
+
+  await saleModel.updateSale(productId, +quantity, id);
+
+  return {
+    saleId: id,
+    itemUpdated: [product],
+  };
+};
+
 module.exports = {
   createSale,
   getAllSales,
   saleById,
+  updateSale,
 };

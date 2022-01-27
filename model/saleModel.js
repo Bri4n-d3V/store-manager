@@ -36,7 +36,6 @@ const getAllSales = async () => {
      sales_products AS sp ON s.id = sp.sale_id;`,
   );
 
-  console.log('saleModel', sale);
   return sale;
 };
 
@@ -57,8 +56,22 @@ WHERE
   return sale;
 };
 
+const updateSale = async (productId, quantity, id) => {
+const [sale] = await connection.query(
+  `UPDATE sales_products 
+  SET 
+      quantity = ?
+  WHERE
+      sale_id = ? AND product_id = ?;`,
+      [quantity, id, productId],
+);
+
+return [sale];
+};
+
 module.exports = {
   createSale,
   getAllSales,
   saleById,
+  updateSale,
 };

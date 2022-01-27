@@ -7,7 +7,6 @@ router.post('/', async (req, res) => {
   const products = req.body;
 
   const newSale = await saleService.createSale(products);
-  console.log('saleController', newSale);
 
   if (typeof newSale.message === 'string') {
     return res.status(newSale.status).json({ message: newSale.message }); 
@@ -18,7 +17,6 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const allSales = await saleService.getAllSales();
-  console.log('saleController allSales', allSales);
 
   return res.status(200).json(allSales);
 });
@@ -33,6 +31,20 @@ router.get('/:id', async (req, res) => {
   }
 
   return res.status(200).json(saleById);
+});
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const [product] = req.body;
+
+  const sale = await saleService.updateSale(product, +id);
+  console.log('controller sale', sale);
+
+  if (typeof sale.message === 'string') { 
+    return res.status(sale.status).json({ message: sale.message }); 
+}
+
+  return res.status(200).json(sale);
 });
 
 module.exports = router;
