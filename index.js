@@ -3,8 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const productController = require('./controller/productController');
-const saleController = require('./controller/saleController');
+const productController = require('./controllers/productController');
+const saleController = require('./controllers/saleController');
 
 const app = express();
 app.use(bodyParser.json());

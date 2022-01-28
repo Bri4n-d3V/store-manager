@@ -1,4 +1,4 @@
-const saleModel = require('../model/saleModel');
+const saleModel = require('../models/saleModel');
 
 // verifica se os produtos têm ID
 const validateProductId = async (products) => {

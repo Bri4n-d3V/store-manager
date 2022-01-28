@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const saleService = require('../service/saleService');
+const saleService = require('../services/saleService');
 
 router.post('/', async (req, res) => {
   const products = req.body;

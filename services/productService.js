@@ -1,4 +1,4 @@
-const productModel = require('../model/productModel');
+const productModel = require('../models/productModel');
 
 // verifica se o nome da req cumpre alguns requisitos
 const nameIsValid = async (name) => {
